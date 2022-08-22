@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import webstomp from "webstomp-client";
+import { useParams } from "react-router-dom";
 import RoomHeader from "../components/chatRoomPage/RoomHeader";
 import ChatSubmitBox from "../components/chatRoomPage/ChatSubmitBox";
 import ChatCard from "../elements/ChatCard";
@@ -11,6 +12,7 @@ const URI = {
 };
 
 function ChatRoomPage() {
+  const { roomId } = useParams();
   let sockJs = new SockJS(`${URI.BASE}/ws`);
   let stomp_client;
   const handleSendMsg = () => {
@@ -23,13 +25,14 @@ function ChatRoomPage() {
       console.log(payload);
       console.log("connected with server!");
       stomp_client.subscribe(
-        "/sub/chat/room",
+        `/sub/chat/room/${roomId}`,
         function (frame) {
-          console.log(JSON.parse(frame));
+          console.log(JSON.parse(frame.body));
         },
         {}
       );
-      stomp_client.send("/pub/room/message", {}, JSON.stringify("얍!"));
+      const sendBody = JSON.stringify({ content: "얍!" });
+      stomp_client.send(`/pub/room/${roomId}/message`, sendBody, {});
     });
     return () => {
       stomp_client.disconnect();

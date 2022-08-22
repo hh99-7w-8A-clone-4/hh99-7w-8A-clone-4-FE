@@ -8,7 +8,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
-      <Route path="/chatRoom" element={<ChatRoomPage />} />
+      <Route path="/chatRoom/:roomId" element={<ChatRoomPage />} />
     </Routes>
   );
 }

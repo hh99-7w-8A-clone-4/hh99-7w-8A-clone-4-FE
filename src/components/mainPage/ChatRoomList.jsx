@@ -5,8 +5,8 @@ import ChatRoomCard from "../../elements/ChatRoomCard";
 function ChatRoomList() {
   return (
     <StChatRoomList>
-      <ChatRoomCard />
-      <ChatRoomCard />
+      <ChatRoomCard roomId={1} />
+      <ChatRoomCard roomId={2} />
     </StChatRoomList>
   );
 }
