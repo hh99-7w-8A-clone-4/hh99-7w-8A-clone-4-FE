@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import SockJS from "sockjs-client";
+import { useSelector } from "react-redux/es/exports";
 import webstomp from "webstomp-client";
+import SockJS from "sockjs-client";
 import { useParams } from "react-router-dom";
 import RoomHeader from "../components/chatRoomPage/RoomHeader";
 import ChatSubmitBox from "../components/chatRoomPage/ChatSubmitBox";
@@ -13,29 +14,39 @@ const URI = {
 
 function ChatRoomPage() {
   const { roomId } = useParams();
-  let sockJs = new SockJS(`${URI.BASE}/ws`);
-  let stomp_client;
-  const handleSendMsg = () => {
-    stomp_client.send("");
-  };
+  const WSURI = useSelector((state) => state.chatSlice.WSURI) + "/ws";
+  const stompClient = useRef(null);
   useEffect(() => {
-    stomp_client = webstomp.over(sockJs);
-
-    stomp_client.connect({}, function (payload) {
+    let sockJs = new SockJS(WSURI);
+    stompClient.current = webstomp.over(sockJs);
+    stompClient.current.connect({}, function (payload) {
       console.log(payload);
-      console.log("connected with server!");
-      stomp_client.subscribe(
+      console.log("연결은 되었음 ㅎ");
+      stompClient.current.subscribe(
         `/sub/chat/room/${roomId}`,
         function (frame) {
           console.log(JSON.parse(frame.body));
         },
         {}
       );
-      const sendBody = JSON.stringify({ content: "얍!" });
-      stomp_client.send(`/pub/room/${roomId}/message`, sendBody, {});
     });
+    // stompClient.connect({}, function (payload) {
+    //   console.log(payload);
+    //   console.log("connected with server!");
+
+    //   const sendBody = JSON.stringify({ content: "얍!" });
+    //   stompClient.send(`/pub/room/${roomId}/message`, sendBody, {});
+    // });
     return () => {
-      stomp_client.disconnect();
+      stompClient.current
+        .subscribe(
+          `/sub/chat/room/${roomId}`,
+          function (frame) {
+            console.log(JSON.parse(frame.body));
+          },
+          {}
+        )
+        .unsubscribe();
     };
   }, []);
 
