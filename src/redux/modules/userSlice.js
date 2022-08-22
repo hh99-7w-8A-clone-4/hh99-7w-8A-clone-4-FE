@@ -32,12 +32,28 @@ export const __userLogin = createAsyncThunk(
             const {email,password} = payload
             const response = await axios.post(`${URI.BASE}api/login`,
             { email,password }
-            )
-                localStorage.setItem('authorization', response.headers.authorization);
-                localStorage.setItem('refreshToken', response.headers[`refresh-token`]);
+            );
+                const accessToken = response.headers.authorization;
+                const refreshtoken = response.headers[`refresh-token`];
                 localStorage.setItem('isLogin', true);
+                const encodeBody = accessToken.split(".")[1];
+                const decodeBody = Buffer.from(encodeBody, "base64")
+                    .toString("utf8")
+                const jsonBody = JSON.parse(decodeBody);
+                console.log(jsonBody);
                 console.log("22222");
-                return thunkAPI.fulfillWithValue(response.data)
+                console.log(encodeBody);
+                console.log(decodeBody);
+                localStorage.setItem('userId',jsonBody.jti);
+                localStorage.setItem('userName',jsonBody.sub);
+                localStorage.setItem('accessToken',accessToken);
+                localStorage.setItem('refreshtoken',refreshtoken);
+                return thunkAPI.fulfillWithValue({
+                    userId: decodeBody[3],
+                    userName: decodeBody[7],
+                    accessToken,
+                    refreshtoken,
+                })
             
         }
         catch(error){ console.log("33333");
