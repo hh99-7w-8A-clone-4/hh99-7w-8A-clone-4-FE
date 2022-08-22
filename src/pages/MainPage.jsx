@@ -4,16 +4,20 @@ import Footer from "../components/mainPage/Footer";
 import SideBar from "../components/mainPage/SideBar";
 import FriendsList from "../components/mainPage/FriendsList";
 import Header from "../components/mainPage/Header";
+import ChatRoomList from "../components/mainPage/ChatRoomList";
 
 function MainPage() {
   const [onChatList, setOnChatList] = useState(false);
+  const handelOnChat = () => {
+    setOnChatList(true);
+  };
   return (
     <StMainWrapper>
       <StContentsWrapper>
-        <SideBar />
+        <SideBar onChat={onChatList} handleStatus={setOnChatList} />
         <StBodyWrapper>
-          <Header />
-          <FriendsList />
+          <Header isOn={onChatList} />
+          {!onChatList ? <FriendsList /> : <ChatRoomList />}
         </StBodyWrapper>
       </StContentsWrapper>
       <Footer />
