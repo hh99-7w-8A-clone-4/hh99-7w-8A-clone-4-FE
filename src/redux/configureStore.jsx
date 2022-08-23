@@ -1,21 +1,24 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import user from "../redux/module/userSlice"
+import userSlice from "./modules/userSlice"
 import thunk from "redux-thunk";
-import logger from "redux-logger";
+import chatSlice from "./modules/chatSlice";
+import friendSlice from "./modules/friendSlice";
 
 
 const middlewares = [thunk];
 
 // 리듀서 통합
 const rootReducer = combineReducers({
-    user,
+    userSlice,
+    chatSlice,
+    friendSlice,
 });
 
 // 스토어 연결
 const store = configureStore({
     reducer: rootReducer,
 
-    middlewart: [...middlewares, logger],
+    middlewart: [...middlewares],
 });
 
 export default store;

@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
-import logo from '../../static/img'
+import logo from '../../static/img/logo.png'
 import styled from 'styled-components';
 import { useForm } from "react-hook-form";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { __userLogin } from '../../redux/module/userSlice'
+import { __userLogin } from '../../redux/modules/userSlice'
 
 const Loginform = (props) => {
     const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const Loginform = (props) => {
     const { watch, register, handleSubmit, formState:{errors} } = useForm();
     console.log(watch());
 
-    const isLogin = useSelector((state) => state.user.isLogin);//이건 어디에 붙여야 할까>
+    // const isLogin = useSelector((state) => state.user.isLogin);//이건 어디에 붙여야 할까>
     
     const onSubmit = (payload) =>{
         console.log("가보자고!11",payload);

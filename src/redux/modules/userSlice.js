@@ -3,7 +3,7 @@ import axios from "axios";
 //process.env.REACT_APP_BASE_URI
 //'http://3.39.240.159/'
 const URI = {
-    BASE: 'http://3.39.240.159/',
+    BASE: process.env.REACT_APP_BASE_URI,
 };
 
 const LOGIN = "user/LOGIN"
@@ -30,7 +30,7 @@ export const __userLogin = createAsyncThunk(
         console.log("thunk 들어왔다!",payload);
         try {
             const {email,password} = payload
-            const response = await axios.post(`${URI.BASE}api/login`,
+            const response = await axios.post(`${URI.BASE}/api/login`,
             { email,password }
             );
                 const accessToken = response.headers.authorization;
@@ -40,10 +40,12 @@ export const __userLogin = createAsyncThunk(
                 const decodeBody = Buffer.from(encodeBody, "base64")
                     .toString("utf8")
                 const jsonBody = JSON.parse(decodeBody);
-                console.log(jsonBody);
-                console.log("22222");
-                console.log(encodeBody);
-                console.log(decodeBody);
+
+                // console.log(jsonBody);
+                // console.log("22222");
+                // console.log(encodeBody);
+                // console.log(decodeBody);
+
                 localStorage.setItem('userId',jsonBody.jti);
                 localStorage.setItem('userName',jsonBody.sub);
                 localStorage.setItem('accessToken',accessToken);
@@ -64,7 +66,7 @@ export const __userLogin = createAsyncThunk(
 
 
 const userSlice = createSlice({
-    name:"user",
+    name:"userSlice",
     initialState,
     reducers: {},
     extraReducers:{
