@@ -54,9 +54,8 @@ const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
   }
-  .modalOn {
-    display: block  !important;
-    transition: all 0.3s;
+  .hidden {
+    display: none;
   }
 `;
 

@@ -1,21 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import ProfileCard from "../../elements/ProfileCard";
+import { __getFriendList } from "../../redux/modules/friendSlice";
 
 function FriendsList() {
+  const dispatch = useDispatch();
+  const friends = useSelector((state) => state.friendSlice.friends);
+  useEffect(() => {
+    dispatch(__getFriendList());
+  }, []);
   return (
     <StFriendsList>
       <StMyProfileSection>
-        <ProfileCard mine={true} />
+        <ProfileCard
+          mine={true}
+          nickName="강태훈"
+          profileImg="https://images.unsplash.com/photo-1661102165730-dfb7f86b8206?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80"
+          info="10월까지 속세와 단절합니다."
+        />
       </StMyProfileSection>
       <StLine></StLine>
       <p className="friends-counter">친구 118</p>
-      <ProfileCard />
-      <ProfileCard />
-      <ProfileCard />
-      <ProfileCard />
-      <ProfileCard />
-      <ProfileCard />
+      {friends.map((friend) => {
+        return (
+          <ProfileCard
+            key={friend.memberId}
+            nickName={friend.nickname}
+            profileImg={friend.profilePic}
+            info={friend.introduce}
+          />
+        );
+      })}
     </StFriendsList>
   );
 }

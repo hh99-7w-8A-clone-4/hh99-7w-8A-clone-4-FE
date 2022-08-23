@@ -14,7 +14,7 @@ const URI = {
 
 function ChatRoomPage() {
   const { roomId } = useParams();
-  const WSURI = useSelector((state) => state.chatSlice.WSURI) + "/ws";
+  const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
   const stompClient = useRef(null);
   useEffect(() => {
     let sockJs = new SockJS(WSURI);
@@ -54,6 +54,9 @@ function ChatRoomPage() {
     <StChatRoomPage>
       <RoomHeader />
       <StChatListContainer>
+        <ChatCard author="friend" body="윽엑 어지럽다어지러워" />
+        <ChatCard author="me" body="살려줘~" />
+        <ChatCard author="friend" body="응 안대" />
         <ChatCard author="friend" body="윽엑 어지럽다어지러워" />
         <ChatCard
           author="me"

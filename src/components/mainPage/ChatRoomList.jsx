@@ -6,7 +6,7 @@ import SockJS from "sockjs-client";
 import ChatRoomCard from "../../elements/ChatRoomCard";
 
 function ChatRoomList() {
-  const WSURI = useSelector((state) => state.chatSlice.WSURI) + "/ws";
+  const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
   let stompClient = useRef(null);
   const [rooms, setRooms] = useState([]);
 

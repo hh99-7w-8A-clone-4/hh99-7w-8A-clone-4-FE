@@ -6,7 +6,22 @@ const URI = {
 };
 
 const initialState = {
-  friends: [],
+  friends: [
+    {
+      memberId: 1,
+      nickname: "hanghae98",
+      profilePic:
+        "https://dimg.donga.com/wps/NEWS/IMAGE/2019/10/22/98002028.1.jpg",
+      introduce: "참을 수 없는 이끌림과 호기심",
+    },
+    {
+      memberId: 2,
+      nickname: "hanghae99",
+      profilePic:
+        "https://dimg.donga.com/wps/NEWS/IMAGE/2019/10/22/98002028.1.jpg",
+      introduce: "묘한 너와 나 두고 보면 알겠지",
+    },
+  ],
   isLoading: false,
   err: null,
 };
@@ -15,10 +30,11 @@ export const __getFriendList = createAsyncThunk(
   "friend/__getFriendList",
   async (payload, thunkAPI) => {
     try {
-      const userToken = localStorage.getItem("userToken");
+      // const userToken = localStorage.getItem("userToken");
       const requestRes = await axios.get(`${URI.BASE}/api/friends`, {
         headers: {
-          Authorization: userToken,
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwic3ViIjoi64G867CCIiwiZXhwIjoxNjYxMTkyMTQ0fQ._3_dwFkF7Sfsklfe_9z65toWuLkLg45QscQ6uRguE1o",
         },
       });
 
@@ -39,7 +55,7 @@ const friendSlice = createSlice({
     },
     [__getFriendList.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.friends.concat(action.payload);
+      state.friends = action.payload;
     },
     [__getFriendList.rejected]: (state, action) => {
       state.isLoading = false;

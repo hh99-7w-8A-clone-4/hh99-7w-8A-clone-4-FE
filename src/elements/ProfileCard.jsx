@@ -2,16 +2,13 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import styled, { css } from "styled-components";
 
-function ProfileCard({ mine }) {
+function ProfileCard({ mine, nickName, profileImg, info }) {
   return (
     <StProfileCard mine={mine}>
-      <img
-        src="https://images.unsplash.com/photo-1661102165730-dfb7f86b8206?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80"
-        placeholder="프로필사진"
-      />
+      <img src={profileImg} placeholder="프로필사진" />
       <StTextWrapper>
-        <h3>강태훈</h3>
-        <p>10월까지 속세와 단절합니다</p>
+        <h3>{nickName}</h3>
+        <p>{info}</p>
       </StTextWrapper>
     </StProfileCard>
   );
