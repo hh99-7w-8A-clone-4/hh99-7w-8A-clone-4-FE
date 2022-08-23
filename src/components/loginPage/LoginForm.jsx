@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { useForm } from "react-hook-form";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { __userLogin } from '../../redux/modules/userSlice'
+import { __userLogin } from '../../redux/modules/userSlice';
+
+
 
 const Loginform = (props) => {
     const dispatch = useDispatch();
@@ -22,7 +24,7 @@ const Loginform = (props) => {
 
 
     return (
-        <LoginLayout>
+        <>
             <LoginBox>
                 <Logo src={logo} alt="로고"></Logo>
                 <InputArea onSubmit={handleSubmit(onSubmit)}>
@@ -37,7 +39,7 @@ const Loginform = (props) => {
                         pattern:/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/,
                         })}//숫자0-9영어대소a-z특문-_. @ 숫자0-9영어대소a-z특문-_. . 영문대소a-z
                         />
-                        {errors.email && errors.email.type === "pattern" && <p> 이메일을 입력해주세요. </p>}
+                        {errors.email && errors.email.type === "pattern" && <p> 이메일 형식을 입력해주세요. </p>}
                         
                         <input 
                         type="password"
@@ -55,29 +57,19 @@ const Loginform = (props) => {
                     <button type='submit'>로그인</button>
                 </InputArea>
             </LoginBox>
-        </LoginLayout>
+        </>
     );
 };
 
 export default Loginform;
 
-const LoginLayout = styled.div`
-    background-color: #fffdd7;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-content: space-around;
-    justify-content: center;
-    flex-wrap: nowrap;
-    align-items: center;
-`;
+
 
 const LoginBox = styled.div`
-    background-color: #FFEB33;
+    /* background-color: #FFEB33;
     box-shadow: 0px 0px 3px #ACADB1;
     padding: 100px;
-    padding-bottom: 300px;
+    padding-bottom: 300px; */
 `;
 
 const Logo = styled.img`
@@ -111,7 +103,11 @@ const InputArea = styled.form`
         height: 50px;
         border: none;
         margin-top: 10px;
-        box-shadow: 0px 0px 4px #ACADB1;
+        cursor: pointer;
+        box-shadow: -0.5px -0.5px 4px #ACADB1;
+        &:hover{
+            color: gray;
+            box-shadow: 0px 0px 4px #646464;
+        }
     }
-    
 `;

@@ -1,5 +1,5 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-// import './reset.css';
+import './reset.css';
 import Loginpage from "./pages/LoginPage";
 import Registerpage from "./pages/RegisterPage"
 import logo from "./logo.svg";
