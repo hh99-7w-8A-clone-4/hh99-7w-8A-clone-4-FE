@@ -7,24 +7,37 @@ import ChatRoomCard from "../../elements/ChatRoomCard";
 
 function ChatRoomList() {
   const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
-  let stompClient = useRef(null);
+  const stompClient = useRef(null);
   const [rooms, setRooms] = useState([]);
-
   useEffect(() => {
     let sockJs = new SockJS(WSURI);
+    let listSubscription;
     stompClient.current = webstomp.over(sockJs);
-    console.log(stompClient.current);
+    // console.log(stompClient);
     stompClient.current.connect({}, function (payload) {
-      console.log("연결은 되었음 ㅎ");
-      stompClient.current.subscribe(`/sub/rooms`, function (frame) {
-        setRooms([...rooms, ...JSON.parse(frame.body)]);
-      });
+      listSubscription = stompClient.current.subscribe(
+        `/sub/room/${localStorage.getItem("userId")}`,
+        function (frame) {
+          console.log(frame);
+          setRooms([...rooms, ...JSON.parse(frame.body)]);
+        }
+      );
+
+      stompClient.current.send(
+        `/pub/room/${localStorage.getItem("userId")}`,
+        {},
+        {
+          Authorization: localStorage.getItem("accessToken"),
+        }
+      );
       console.log(stompClient.current);
     });
     return () => {
-      // stompClient.current.disconnect();
+      listSubscription.unsubscribe();
+      stompClient.current.disconnect();
     };
   }, []);
+  console.log(rooms);
   return (
     <>
       <StChatRoomList>
@@ -32,7 +45,16 @@ function ChatRoomList() {
           <h1 className="no-chatroom">참여중인 채팅방이 없어요!</h1>
         ) : (
           rooms.map((room) => {
-            return <ChatRoomCard roomId={room.roomMasterId} />;
+            return (
+              <ChatRoomCard
+                key={room.roomMasterId}
+                roomId={room.roomMasterId}
+                roomName={room.roomName}
+                people={room.people}
+                stompClient={stompClient.current}
+                initialRecentChat={room.recentChat}
+              />
+            );
           })
         )}
       </StChatRoomList>

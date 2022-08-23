@@ -1,28 +1,65 @@
 import userEvent from "@testing-library/user-event";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
-function ChatRoomCard({ roomId }) {
-  const handleOnChatRoom = () => {};
-  console.log(roomId);
+function ChatRoomCard({
+  roomId,
+  roomName,
+  people,
+  stompClient,
+  initialRecentChat,
+}) {
+  const [recentChat, setRecentChat] = useState("");
+  const unReadChat = useRef(0);
+  useEffect(() => {
+    let recentChatSubscription;
+
+    recentChatSubscription = stompClient.subscribe(
+      `/sub/chat/room/${roomId}`,
+      function (frame) {
+        setRecentChat(JSON.parse(frame.body).content);
+        unReadChat.current += 1;
+        // setChatList([...chatList, JSON.parse(frame.body).content]);
+
+        // setChatList(받은채팅리스트 ?);
+      },
+      {
+        Authorization: localStorage.getItem("accessToken"),
+      }
+    );
+
+    return () => {
+      recentChatSubscription.unsubscribe();
+      stompClient.disconnect();
+    };
+  }, []);
+  const handleOpenRoom = () => {
+    unReadChat.current = 0;
+  };
   return (
-    <StChatRoomCard>
-      <img
-        src="https://images.unsplash.com/photo-1661102165730-dfb7f86b8206?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80"
-        placeholder="방 프로필"
-      />
-      <StTextWrapper>
-        <Link to={`/chatRoom/${roomId}`}>
-          <h3>강태훈,강머훈</h3>
-          <p>윽엑윽옥악엑악</p>
-        </Link>
-      </StTextWrapper>
-    </StChatRoomCard>
+    <Link to={`/chatRoom/${roomId}`}>
+      <StChatRoomCard>
+        <img
+          src="https://images.unsplash.com/photo-1661102165730-dfb7f86b8206?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80"
+          placeholder="방 프로필"
+        />
+        <StTextWrapper>
+          <h3>
+            {roomName} {people}
+          </h3>
+          <p>{unReadChat.current !== 0 ? recentChat : initialRecentChat}</p>
+          {unReadChat.current !== 0 && (
+            <div className="unReadAlert">{unReadChat.current}</div>
+          )}
+        </StTextWrapper>
+      </StChatRoomCard>
+    </Link>
   );
 }
 
 const StChatRoomCard = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   padding-left: 20px;
@@ -53,6 +90,21 @@ const StTextWrapper = styled.div`
     margin: 0 0 5px 0;
     font-size: 0.8rem;
     margin-left: 10px;
+  }
+  .unReadAlert {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    right: 10px;
+    top: 22px;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: red;
+    border-radius: 50%;
   }
 `;
 export default ChatRoomCard;

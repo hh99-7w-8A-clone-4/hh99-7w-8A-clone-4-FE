@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
-function ChatSubmitBox({ stompClient }) {
+function ChatSubmitBox({ stompClient, roomId }) {
   const [chatBody, setChatBody] = useState("");
+
   const handleSubmitChat = (e) => {
     e.preventDefault();
-    stompClient.current.send(`url`, chatBody, {});
+    const createdAt = Date.now().toString();
+    const content = {
+      content: chatBody,
+      memberId: localStorage.getItem("userId"),
+      nickname: localStorage.getItem("userName"),
+      profilePic:
+        "https://images.unsplash.com/photo-1497171156029-51dfc973e5f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+      createdAt,
+    };
+    stompClient.current.send(
+      `/pub/chat/room/${roomId}`,
+      JSON.stringify(content),
+      {
+        Authorization: localStorage.getItem("accessToken"),
+      }
+    );
     setChatBody("");
   };
   return (

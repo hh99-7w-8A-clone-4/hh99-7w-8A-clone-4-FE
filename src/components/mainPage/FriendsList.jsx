@@ -4,11 +4,14 @@ import styled from "styled-components";
 import ProfileCard from "../../elements/ProfileCard";
 import { __getFriendList } from "../../redux/modules/friendSlice";
 
-function FriendsList() {
+function FriendsList({ stompClient }) {
   const dispatch = useDispatch();
   const friends = useSelector((state) => state.friendSlice.friends);
   useEffect(() => {
     dispatch(__getFriendList());
+    if (stompClient.connected === true) {
+      stompClient?.disconnect();
+    }
   }, []);
   return (
     <StFriendsList>

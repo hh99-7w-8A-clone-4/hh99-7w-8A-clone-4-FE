@@ -10,7 +10,7 @@ import FriendsList from "../components/mainPage/FriendsList";
 import Header from "../components/mainPage/Header";
 import ChatRoomList from "../components/mainPage/ChatRoomList";
 
-function MainPage() {
+function MainPage({ stompClient }) {
   const dispatch = useDispatch();
   const loggedUserName = useSelector((state) => state.userSlice.userName);
   const [onChatList, setOnChatList] = useState(false);
@@ -32,7 +32,11 @@ function MainPage() {
         />
         <StBodyWrapper>
           <Header isOn={onChatList} />
-          {!onChatList ? <FriendsList /> : <ChatRoomList />}
+          {!onChatList ? (
+            <FriendsList stompClient={stompClient} />
+          ) : (
+            <ChatRoomList stompClient={stompClient} />
+          )}
         </StBodyWrapper>
       </StContentsWrapper>
       <Footer />

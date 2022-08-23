@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import webstomp from "webstomp-client";
 import { Buffer } from "buffer";
+import SockJS from "sockjs-client";
 //process.env.REACT_APP_BASE_URI
 //'http://3.39.240.159/'
 const URI = {
@@ -23,6 +25,7 @@ export function UserLogIn(user) {
 const initialState = {
   userName: null,
 };
+
 //엑세스토큰 안에
 
 export const __userLogin = createAsyncThunk(
