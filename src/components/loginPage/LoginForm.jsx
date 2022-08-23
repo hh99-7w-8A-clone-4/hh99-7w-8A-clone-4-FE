@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import logo from '../../img/logo.png'
+import logo from '../../static/img'
 import styled from 'styled-components';
 import { useForm } from "react-hook-form";
 import { useSelector } from 'react-redux';
