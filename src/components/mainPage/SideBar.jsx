@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { AiOutlineUser } from "react-icons/ai";
-import { AiOutlineWechat } from "react-icons/ai";
+import { AiOutlineUser, AiOutlineWechat } from "react-icons/ai";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 
-function SideBar({ onChat, handleStatus }) {
+function SideBar({ handleStatus, handleLogout }) {
   return (
     <StSideBar>
       <AiOutlineUser
@@ -16,11 +16,17 @@ function SideBar({ onChat, handleStatus }) {
           handleStatus(true);
         }}
       />
+      <RiLogoutCircleRLine
+        onClick={() => {
+          handleLogout();
+        }}
+      />
     </StSideBar>
   );
 }
 
 const StSideBar = styled.div`
+  position: relative;
   width: 66px;
   height: calc(100vh - 102px);
   background-color: #ececed;
@@ -31,9 +37,18 @@ const StSideBar = styled.div`
   padding-left: 2px;
   border-right: 2px solid #e9e9ea;
   svg {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
+    padding: 5px;
     margin-bottom: 28px;
+    :hover {
+      background-color: #b5b6b9;
+      border-radius: 50%;
+    }
+    :nth-of-type(3) {
+      position: absolute;
+      bottom: 10px;
+    }
   }
 `;
 export default SideBar;

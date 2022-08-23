@@ -8,28 +8,27 @@ import RoomHeader from "../components/chatRoomPage/RoomHeader";
 import ChatSubmitBox from "../components/chatRoomPage/ChatSubmitBox";
 import ChatCard from "../elements/ChatCard";
 
-const URI = {
-  BASE: process.env.REACT_APP_BASE_URI,
-};
-
 function ChatRoomPage() {
   const { roomId } = useParams();
   const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
   const stompClient = useRef(null);
+
   useEffect(() => {
     let sockJs = new SockJS(WSURI);
     stompClient.current = webstomp.over(sockJs);
-    stompClient.current.connect({}, function (payload) {
-      console.log(payload);
-      console.log("연결은 되었음 ㅎ");
-      stompClient.current.subscribe(
-        `/sub/chat/room/${roomId}`,
-        function (frame) {
-          console.log(JSON.parse(frame.body));
-        },
-        {}
-      );
-    });
+    stompClient.current.subscribe(
+      `/sub/chat/room/${roomId}`,
+      function (frame) {
+        console.log(JSON.parse(frame.body));
+      },
+      {}
+    );
+    // stompClient.current.connect({}, function (payload) {
+    //   console.log(payload);
+    //   console.log("연결은 되었음 ㅎ");
+
+    // });
+
     // stompClient.connect({}, function (payload) {
     //   console.log(payload);
     //   console.log("connected with server!");
@@ -38,15 +37,7 @@ function ChatRoomPage() {
     //   stompClient.send(`/pub/room/${roomId}/message`, sendBody, {});
     // });
     return () => {
-      stompClient.current
-        .subscribe(
-          `/sub/chat/room/${roomId}`,
-          function (frame) {
-            console.log(JSON.parse(frame.body));
-          },
-          {}
-        )
-        .unsubscribe();
+      stompClient.current.unsubscribe();
     };
   }, []);
 
@@ -63,7 +54,7 @@ function ChatRoomPage() {
           body="나주거나주거 나주거 나살려조 나주거 나주거"
         />
       </StChatListContainer>
-      <ChatSubmitBox />
+      <ChatSubmitBox stompClient={stompClient} />
     </StChatRoomPage>
   );
 }

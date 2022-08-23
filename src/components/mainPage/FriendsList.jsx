@@ -21,7 +21,7 @@ function FriendsList() {
         />
       </StMyProfileSection>
       <StLine></StLine>
-      <p className="friends-counter">친구 118</p>
+      <p className="friends-counter">친구 {friends.length}</p>
       {friends.map((friend) => {
         return (
           <ProfileCard

@@ -1,9 +1,20 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import { useDispatch } from "react-redux/es/hooks/useDispatch";
+import { useSelector } from "react-redux/es/exports";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BiMessageRoundedAdd } from "react-icons/bi";
+import {
+  __findFriendProfile,
+  resetFindProfile,
+  __addFriend,
+} from "../../redux/modules/friendSlice";
 
 function Header({ isOn }) {
+  const findFriendProfile = useSelector(
+    (state) => state.friendSlice.friendProfile
+  );
+  const dispatch = useDispatch();
   const modalRef = useRef();
   const handleToggleModal = useCallback((e) => {
     e.stopPropagation();
@@ -13,11 +24,19 @@ function Header({ isOn }) {
       e.target.className.baseVal === "add-friend"
     ) {
       modalRef.current.classList.toggle("hidden");
+      dispatch(resetFindProfile());
+      setFindName("");
     }
   });
   const handleFindFriend = (e) => {
     e.preventDefault();
-    console.log(findName);
+    dispatch(__findFriendProfile(findName));
+  };
+  const handleAddFriend = (e) => {
+    e.stopPropagation();
+    dispatch(__addFriend(findName));
+    modalRef.current.classList.toggle("hidden");
+    dispatch(resetFindProfile());
     setFindName("");
   };
   const [findName, setFindName] = useState("");
@@ -29,6 +48,7 @@ function Header({ isOn }) {
       e.target.value = e.target.value.slice(0, e.target.maxLength);
     }
   }
+
   return (
     <StHeader>
       {!isOn ? (
@@ -51,9 +71,9 @@ function Header({ isOn }) {
         onClick={handleToggleModal}
         id="friend-modal-bg"
       >
-        <div className="friend-modal-body" nameLength={findName.length}>
+        <StModalBody className="friend-modal-body" nameLength={findName.length}>
           <h2>친구 추가</h2>
-          <span>ID로 추가</span>
+          <span className="modal-title">ID로 추가</span>
           <form onSubmit={handleFindFriend}>
             <input
               onChange={onChange}
@@ -61,11 +81,21 @@ function Header({ isOn }) {
               value={findName}
               maxLength="20"
             />
-            <span>{`${findName.length}/20`}</span>
+            <span className="input-info">{`${findName.length}/20`}</span>
 
             <button>찾기</button>
           </form>
-        </div>
+          {findFriendProfile.memberId !== undefined && (
+            <>
+              <StFriendProfileContainer>
+                <img src={findFriendProfile.profilePic} />
+                <span>{findFriendProfile.nickname}</span>
+                <span>{findFriendProfile.introduce}</span>
+                <button onClick={handleAddFriend}>친구추가</button>
+              </StFriendProfileContainer>
+            </>
+          )}
+        </StModalBody>
       </StFriendModal>
     </StHeader>
   );
@@ -97,7 +127,7 @@ const StHeader = styled.div`
     }
   }
 `;
-
+const StModalBody = styled.div``;
 const StFriendModal = styled.div`
   position: absolute;
   top: 0;
@@ -119,7 +149,7 @@ const StFriendModal = styled.div`
     h2 {
       padding-bottom: 30px;
     }
-    span {
+    .modal-title {
       width: 100%;
       text-align: center;
       padding-bottom: 10px;
@@ -141,7 +171,7 @@ const StFriendModal = styled.div`
           border-color: #000;
         }
       }
-      span {
+      .input-info {
         position: absolute;
         top: 5px;
         right: 60px;
@@ -172,6 +202,42 @@ const StFriendModal = styled.div`
         }}
       }
     }
+  }
+`;
+
+const StFriendProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  height: 300px;
+  margin-top: 30px;
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid black;
+  }
+  span {
+    width: 100%;
+    padding-bottom: 10px;
+    text-align: center;
+    :nth-of-type(1) {
+      padding-top: 10px;
+      font-size: 1rem;
+    }
+    :nth-of-type(2) {
+      font-size: 0.8rem;
+    }
+  }
+  button {
+    margin-left: 8px;
+    width: 100px;
+    height: 28px;
+    background-color: #ffec42;
+    border: 1px solid #e8d73f;
+    border-radius: 5px;
+    letter-spacing: 0.1rem;
   }
 `;
 export default Header;

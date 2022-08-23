@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
-function ChatSubmitBox() {
+function ChatSubmitBox({ stompClient }) {
   const [chatBody, setChatBody] = useState("");
-  const handlSubmitChat = (e) => {
+  const handleSubmitChat = (e) => {
     e.preventDefault();
-    console.log(chatBody);
+    stompClient.current.send(`url`, chatBody, {});
     setChatBody("");
   };
   return (
     <StBoxContainer>
-      <StChatForm onSubmit={handlSubmitChat} chatLength={chatBody.length}>
+      <StChatForm onSubmit={handleSubmitChat} chatLength={chatBody.length}>
         <textarea
           onChange={(e) => {
             setChatBody(e.target.value);
