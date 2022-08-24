@@ -48,7 +48,7 @@ function Header({ isOn }) {
       e.target.value = e.target.value.slice(0, e.target.maxLength);
     }
   }
-
+  const handleCreateRoom = () => {};
   return (
     <StHeader>
       {!isOn ? (

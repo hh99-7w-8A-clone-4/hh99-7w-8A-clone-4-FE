@@ -9,11 +9,11 @@ function ChatRoomList() {
   const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
   const stompClient = useRef(null);
   const [rooms, setRooms] = useState([]);
+
   useEffect(() => {
     let sockJs = new SockJS(WSURI);
     let listSubscription;
     stompClient.current = webstomp.over(sockJs);
-    // console.log(stompClient);
     stompClient.current.connect({}, function (payload) {
       listSubscription = stompClient.current.subscribe(
         `/sub/room/${localStorage.getItem("userId")}`,
@@ -37,7 +37,43 @@ function ChatRoomList() {
       stompClient.current.disconnect();
     };
   }, []);
+  useEffect(() => {
+    let invitedRoomSubscription;
+    if (stompClient.current.connected) {
+      invitedRoomSubscription = stompClient.current.subscribe(
+        `/sub/room/invite/${localStorage.getItem("userId")}`,
+        function (payload) {
+          console.log(rooms);
+          setRooms([...rooms, payload]);
+        }
+      );
+    }
+    return () => {
+      invitedRoomSubscription?.unsubscribe();
+    };
+  }, [rooms]);
   console.log(rooms);
+  const [ids, setIds] = useState({ user1: 0, user2: 0 });
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setIds({ ...ids, [name]: parseInt(value) });
+  };
+  const handleSubmitInvite = (e) => {
+    e.preventDefault();
+    const friends = JSON.stringify([ids.user1, ids.user2]);
+    console.log(friends);
+    stompClient.current.send(
+      `/pub/room/invite/${localStorage.getItem("userId")}`,
+
+      friends,
+
+      {
+        Authorization: localStorage.getItem("accessToken"),
+      }
+    );
+    setIds({ ...ids, user1: 0, user2: 0 });
+    console.log(ids);
+  };
   return (
     <>
       <StChatRoomList>
@@ -57,6 +93,24 @@ function ChatRoomList() {
             );
           })
         )}
+        <form onSubmit={handleSubmitInvite}>
+          <input
+            placeholder="user1"
+            name="user1"
+            id="user1Id"
+            onChange={onChange}
+            value={ids.user1}
+          />
+
+          <input
+            placeholder="user2"
+            name="user2"
+            id="user2Id"
+            onChange={onChange}
+            value={ids.user2}
+          />
+          <button>사람추가하기</button>
+        </form>
       </StChatRoomList>
     </>
   );
