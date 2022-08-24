@@ -31,6 +31,11 @@ function ChatSubmitBox({ stompClient, roomId }) {
           onChange={(e) => {
             setChatBody(e.target.value);
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSubmitChat(e);
+            }
+          }}
           value={chatBody}
         />
         <button>전송</button>
@@ -61,6 +66,8 @@ const StChatForm = styled.form`
     font-size: 0.8rem;
     :focus {
       outline: none;
+      text-decoration: none;
+      color: black;
     }
   }
 

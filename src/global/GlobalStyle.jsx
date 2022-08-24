@@ -7,12 +7,12 @@ const GlobalStyle = createGlobalStyle`
   // :: Korean Font import
  
     @font-face {
-    font-family: 'GangwonEdu_OTFLightA';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFLightA.woff') format('woff');
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+    }
 
-}
 
   // :: Basic Font import
   :root {
@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
     --text-color: #000000;
     --border-style: 2px solid #000000;
     --english-font:'Ubuntu', sans-serif;
-    --basic-font:'GangwonEdu_OTFLightA', sans-serif;
+    --basic-font: 'GmarketSansMedium', sans-serif;
   }
   
   * {
@@ -58,6 +58,10 @@ const GlobalStyle = createGlobalStyle`
   }
   .hidden {
     display: none;
+  }
+
+  .focus-btn {
+    background-color: #f7ca13 !important;
   }
 `;
 

@@ -17,7 +17,7 @@ function ChatRoomPage() {
   const listRef = useRef();
   const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
   const stompClient = useRef(null);
-  const prevDate = useRef(null);
+  const prevDate = useRef(0);
   const chatList = useSelector((state) => state.chatSlice.chatList);
   useEffect(() => {
     let sockJs = new SockJS(WSURI);
@@ -44,7 +44,8 @@ function ChatRoomPage() {
 
     return () => {
       prevDate.current = null;
-      subscription.unsubscribe();
+      const headers = { memberId: localStorage.getItem("userId"), roomId };
+      subscription.unsubscribe(headers);
       stompClient.current.disconnect();
     };
   }, [dispatch]);
@@ -57,6 +58,10 @@ function ChatRoomPage() {
       <StChatListContainer ref={listRef}>
         {chatList?.map((chat) => {
           const convertToDate = new Date(chat.createdAt);
+          let options = { weekday: "long" };
+          const intl = new Intl.DateTimeFormat("ko-KR", options).format(
+            convertToDate
+          );
           if (
             prevDate.current < convertToDate.getDate() ||
             prevDate.current == null
@@ -66,16 +71,21 @@ function ChatRoomPage() {
               <>
                 <p
                   key={
+                    convertToDate.getFullYear() +
+                    "년" +
                     convertToDate.getMonth() +
-                    "월/" +
+                    "월" +
                     convertToDate.getDate() +
                     "."
                   }
                 >
-                  {convertToDate.getMonth() +
-                    "월/" +
+                  {convertToDate.getFullYear() +
+                    "년 " +
+                    convertToDate.getMonth() +
+                    "월 " +
                     convertToDate.getDate() +
-                    "일"}
+                    "일 " +
+                    intl}
                 </p>
                 <ChatCard
                   key={chat.createdAt}
@@ -134,10 +144,12 @@ const StChatListContainer = styled.div`
     width: 60%;
     background-color: #ffffff88;
     border-radius: 15px;
-    text-align: center;
     font-size: 0.9rem;
     padding: 2px 0;
     letter-spacing: 0.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 

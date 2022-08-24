@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import styled, { css } from "styled-components";
 
-function ProfileCard({ mine, nickName, profileImg, info }) {
+function ProfileCard({ mine, nickName, profileImg, info, children }) {
   return (
     <StProfileCard mine={mine}>
       <img src={profileImg} placeholder="프로필사진" />
@@ -10,12 +10,14 @@ function ProfileCard({ mine, nickName, profileImg, info }) {
         <h3>{nickName}</h3>
         <p>{info}</p>
       </StTextWrapper>
+      {children}
     </StProfileCard>
   );
 }
 
 const StProfileCard = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   padding-left: 20px;
   width: calc(100vw - 66px);
@@ -39,6 +41,21 @@ const StProfileCard = styled.div`
   }
   :hover {
     background-color: #f8f8f8;
+  }
+  button {
+    position: absolute;
+    right: 20px;
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    border: 1.5px solid #c8c8c8;
+    background-color: #fff;
   }
 `;
 

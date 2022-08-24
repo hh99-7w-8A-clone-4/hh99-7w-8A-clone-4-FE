@@ -12,20 +12,14 @@ import SockJS from "sockjs-client";
 
 const App = (props) => {
   const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
-  const stompClient = useRef(webstomp.over(SockJS(WSURI)));
+  // const stompClient = useRef(webstomp.over(SockJS(WSURI)));
   return (
     <>
       <Routes>
         <Route path="/" element={<Loginpage />} />
         <Route path="/signUp" element={<Registerpage />} />
-        <Route
-          path="/main"
-          element={<MainPage stompClient={stompClient.current} />}
-        />
-        <Route
-          path="/chatRoom/:roomId"
-          element={<ChatRoomPage stompClient={stompClient.current} />}
-        />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/chatRoom/:roomId" element={<ChatRoomPage />} />
       </Routes>
     </>
   );

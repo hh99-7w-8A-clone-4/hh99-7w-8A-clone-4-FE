@@ -9,9 +9,10 @@ function ChatRoomCard({
   people,
   stompClient,
   initialRecentChat,
+  unReadCount,
 }) {
   const [recentChat, setRecentChat] = useState("");
-  const unReadChat = useRef(0);
+  const unReadChat = useRef(unReadCount);
   useEffect(() => {
     let recentChatSubscription;
 
@@ -31,7 +32,6 @@ function ChatRoomCard({
 
     return () => {
       recentChatSubscription.unsubscribe();
-      stompClient.disconnect();
     };
   }, []);
   const handleOpenRoom = () => {
@@ -48,7 +48,7 @@ function ChatRoomCard({
           <h3>
             {roomName} {people}
           </h3>
-          <p>{unReadChat.current !== 0 ? recentChat : initialRecentChat}</p>
+          <p>{recentChat !== "" ? recentChat : initialRecentChat}</p>
           {unReadChat.current !== 0 && (
             <div className="unReadAlert">{unReadChat.current}</div>
           )}

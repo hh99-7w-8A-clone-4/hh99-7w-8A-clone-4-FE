@@ -9,18 +9,17 @@ function FriendsList({ stompClient }) {
   const friends = useSelector((state) => state.friendSlice.friends);
   useEffect(() => {
     dispatch(__getFriendList());
-    if (stompClient.connected === true) {
-      stompClient?.disconnect();
-    }
   }, []);
+  const { userName, userProfileImg, userInfo } = localStorage;
   return (
     <StFriendsList>
       <StMyProfileSection>
         <ProfileCard
+          key="mine"
           mine={true}
-          nickName="강태훈"
-          profileImg="https://images.unsplash.com/photo-1661102165730-dfb7f86b8206?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80"
-          info="10월까지 속세와 단절합니다."
+          nickName={userName}
+          profileImg={userProfileImg}
+          info={userInfo}
         />
       </StMyProfileSection>
       <StLine></StLine>

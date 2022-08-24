@@ -37,6 +37,7 @@ export const __userLogin = createAsyncThunk(
         email,
         password,
       });
+      console.log(response);
       const accessToken = response.headers.authorization;
       const refreshtoken = response.headers[`refresh-token`];
       const encodeBody = accessToken.split(".")[1];
@@ -44,6 +45,8 @@ export const __userLogin = createAsyncThunk(
       const jsonBody = JSON.parse(decodeBody);
       localStorage.setItem("userId", jsonBody.jti);
       localStorage.setItem("userName", jsonBody.sub);
+      localStorage.setItem("userProfileImg", response.data.profilePic);
+      localStorage.setItem("userInfo", response.data.introduce);
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshtoken", refreshtoken);
       return thunkAPI.fulfillWithValue(jsonBody.sub);
