@@ -49,7 +49,7 @@ const Loginform = (props) => {
                         {...register("password", 
                         {required: "비밀번호는 필수입니다.", 
                         pattern:/(?=.*\d{1,50})(?=.*[~`!@#$%&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{6,12}$/ 
-                        })}
+                        })}// {최소글자수,최대글자수} 비밀번호 정규식(검색)
                         />
                         {errors.password && errors.password.type === "pattern" && <p> 비밀번호 형식(영문,숫자,특수문자 6~12자)을 맞춰주세요. </p>}
                     </div>
@@ -70,6 +70,7 @@ const LoginBox = styled.div`
     box-shadow: 0px 0px 3px #ACADB1;
     padding: 100px;
     padding-bottom: 300px; */
+    
 `;
 
 const Logo = styled.img`

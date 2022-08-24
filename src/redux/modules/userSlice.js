@@ -4,7 +4,7 @@ import { Buffer } from "buffer";
 //process.env.REACT_APP_BASE_URI
 //'http://3.39.240.159/'
 const URI = {
-    BASE: 'http://3.39.240.159/',
+    BASE: 'http://3.39.240.159',
 };
 
 const LOGIN = "user/LOGIN"
@@ -24,6 +24,29 @@ const initialState = {
     isLogin: localStorage.getItem("AccessToken") ? true : false,
 }
 
+//회원가입
+export const __userRegister = createAsyncThunk(
+    "/api/signup",
+    async(payload, thunkAPI) => {
+        try {
+            const response = await axios.post(`${URI.BASE}/api/signup`,{
+                email: payload.email, 
+                nickname: payload.nickname,
+                password:payload.password,
+                passwordCheck:payload.passwordCheck,
+            });
+            // 값을 저장후, main페이지로 이동시켜줍니다.>how??
+            console.log(response);
+            return thunkAPI.fulfillWithValue(response);
+        } catch (error){
+            return thunkAPI.rejectWithValue(error.status);
+            alert("중복된 계정입니다. 다시 입력하세요.");
+        }
+    }
+);
+
+
+
 //eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0Iiwic3ViIjoi7YWM7Iqk7Yq4IiwiZXhwIjoxNjYxMTU5NjgxfQ.v0OeANxIneZbSBsGIRFlIIG30H2fYQcyqoosOxcU9zM
 export const __userLogin = createAsyncThunk(
     "/api/login",
@@ -31,7 +54,7 @@ export const __userLogin = createAsyncThunk(
         console.log("thunk 들어왔다!",payload);
         try {
             const {email,password} = payload
-            const response = await axios.post(`${URI.BASE}api/login`,
+            const response = await axios.post(`${URI.BASE}/api/login`,
             { email,password }
             );
                 const accessToken = response.headers.authorization;
@@ -41,10 +64,6 @@ export const __userLogin = createAsyncThunk(
                 const decodeBody = Buffer.from(encodeBody, "base64")
                     .toString("utf8")
                 const jsonBody = JSON.parse(decodeBody);
-                console.log(jsonBody);
-                console.log("22222");
-                console.log(encodeBody);
-                console.log(decodeBody);
                 localStorage.setItem('userId',jsonBody.jti);
                 localStorage.setItem('userName',jsonBody.sub);
                 localStorage.setItem('accessToken',accessToken);
@@ -57,7 +76,7 @@ export const __userLogin = createAsyncThunk(
                 })
             
         }
-        catch(error){ console.log("33333");
+        catch(error){
             return thunkAPI.rejectWithValue(error);
         }
     }
@@ -94,17 +113,14 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers:{
         [__userLogin.fulfilled]: (state, action) => {
-            console.log("44444");
             state.success = action.payload;
             state.isLogin = true
         },
         [__userLogin.rejected]: (state, action) => {
-            console.log("55555");
             state.isLogin = false;
             state.error = action.payload;
         }
     }
-
 })
 
 // export const { login, logout } = userSlice.actions;

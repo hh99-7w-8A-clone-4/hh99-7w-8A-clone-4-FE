@@ -7,10 +7,8 @@ import styled from 'styled-components';
 
 
 const Loginpage = () => {
-
     // const isLogin = useSelector((state) => state.user.isLogin);
     
-
     return (
         <LoginLayout>
             <Loginform/>
@@ -31,6 +29,11 @@ const LoginLayout = styled.div`
     justify-content: center;
     flex-wrap: nowrap;
     align-items: center;
+    //드래그 막는 css 태그 4개
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     >.Footer {
         margin: 100px;
