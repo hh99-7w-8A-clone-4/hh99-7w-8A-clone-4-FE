@@ -9,7 +9,7 @@ import RoomHeader from "../components/chatRoomPage/RoomHeader";
 import ChatSubmitBox from "../components/chatRoomPage/ChatSubmitBox";
 import ChatCard from "../elements/ChatCard";
 import { __getinitialChatList } from "../redux/modules/chatSlice";
-import { postChat } from "../redux/modules/chatSlice";
+import { postChat, clearChat } from "../redux/modules/chatSlice";
 
 function ChatRoomPage() {
   const { roomId } = useParams();
@@ -43,6 +43,7 @@ function ChatRoomPage() {
     );
 
     return () => {
+      dispatch(clearChat());
       prevDate.current = null;
       const headers = { memberId: localStorage.getItem("userId"), roomId };
       subscription.unsubscribe(headers);

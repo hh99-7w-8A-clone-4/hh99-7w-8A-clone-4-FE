@@ -62,18 +62,21 @@ function Header({ isOn, stompClient }) {
     ) {
       inviteRef.current.classList.toggle("hidden");
       setSelectedFriend([]);
+      setRoomTitle("");
     }
   };
   const handleCreateRoom = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const friends = JSON.stringify(
-      selectedFriend.map((el) => (el = el.memberId))
-    );
+    const friends = selectedFriend.map((el) => (el = el.memberId));
+    const roomName = roomTitle;
     stompClient.send(
       `/pub/room/invite/${localStorage.getItem("userId")}`,
 
-      friends,
+      JSON.stringify({
+        friends,
+        roomName,
+      }),
 
       {
         Authorization: localStorage.getItem("accessToken"),
@@ -81,8 +84,11 @@ function Header({ isOn, stompClient }) {
     );
     inviteRef.current.classList.toggle("hidden");
     setSelectedFriend([]);
+    setRoomTitle("");
   };
   const [selectedFriend, setSelectedFriend] = useState([]);
+  console.log(selectedFriend);
+  const [roomTitle, setRoomTitle] = useState("");
   return (
     <StHeader>
       {!isOn ? (
@@ -142,7 +148,19 @@ function Header({ isOn, stompClient }) {
       >
         <StModalBody className="invite-modal-body" nameLength={findName.length}>
           <div className="invite-content-container">
-            <h2>대화상대 선택 {selectedFriend.length}</h2>
+            <div className="invite-content-header">
+              <h2>대화상대 선택 {selectedFriend.length}</h2>
+              <input
+                type="text"
+                maxLength={10}
+                onInput={numberMaxLength}
+                onChange={(e) => {
+                  setRoomTitle(e.target.value);
+                }}
+                value={roomTitle}
+              />
+            </div>
+
             {selectedFriend.length === 0 ? (
               <span className="modal-title">
                 채팅방을 함께 개설할 친구들을 선택해주세요!

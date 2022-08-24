@@ -43,6 +43,7 @@ const StHeaderContainer = styled.div`
   padding: 10px;
   width: 100vw;
   height: 74px;
+  overflow: hidden;
   background-color: #a9bdce;
 `;
 
@@ -87,7 +88,14 @@ const StNavGroup = styled.div`
       margin: 0 7px;
     }
   }
+  .outNav {
+    width: 70px;
+  }
   .innerNav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
     svg {
       width: 22px;
       height: 22px;

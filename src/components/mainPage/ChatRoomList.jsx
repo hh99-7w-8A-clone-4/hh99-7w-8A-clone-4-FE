@@ -9,7 +9,6 @@ function ChatRoomList({ stompClient }) {
   const WSURI = useSelector((state) => state.chatSlice.URI) + "/ws";
   // const stompClient = useRef(null);
   const [rooms, setRooms] = useState([]);
-
   useEffect(() => {
     let listSubscription;
     listSubscription = stompClient.subscribe(
@@ -43,7 +42,8 @@ function ChatRoomList({ stompClient }) {
       invitedRoomSubscription = stompClient.subscribe(
         `/sub/room/invite/${localStorage.getItem("userId")}`,
         function (payload) {
-          setRooms([...rooms, payload]);
+          console.log(JSON.parse(payload.body));
+          setRooms([...rooms, JSON.parse(payload.body)]);
         }
       );
     }
@@ -78,9 +78,10 @@ function ChatRoomList({ stompClient }) {
 }
 
 const StChatRoomList = styled.div`
-  width: calc(100vw - 66px);
+  width: calc(100vw - 48px);
   height: calc(100vh - 178px);
   background-color: #ffffff;
+  overflow-y: scroll;
   .no-chatroom {
     margin-top: 20px;
     text-align: center;

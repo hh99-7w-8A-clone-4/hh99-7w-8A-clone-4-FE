@@ -35,6 +35,9 @@ const chatSlice = createSlice({
     postChat: (state, action) => {
       state.chatList.push(action.payload);
     },
+    clearChat: (state, action) => {
+      state.chatList = new Array(0);
+    },
   },
   extraReducers: {
     [__getinitialChatList.pending]: (state, action) => {
@@ -51,6 +54,6 @@ const chatSlice = createSlice({
   },
 });
 
-export const { postChat } = chatSlice.actions;
+export const { postChat, clearChat } = chatSlice.actions;
 
 export default chatSlice.reducer;

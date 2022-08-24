@@ -39,7 +39,7 @@ function FriendsList({ stompClient }) {
 }
 
 const StFriendsList = styled.div`
-  width: calc(100vw - 66px);
+  width: calc(100vw - 48px);
   height: calc(100vh - 178px);
   background-color: #ffffff;
   display: flex;
