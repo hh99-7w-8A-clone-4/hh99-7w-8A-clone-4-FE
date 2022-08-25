@@ -35,27 +35,34 @@ export const __userRegister = createAsyncThunk(
                 password:payload.password,
                 passwordCheck:payload.passwordCheck,
             });
-            // 값을 저장후, main페이지로 이동시켜줍니다.>how??
+            
             console.log(response);
+            if(response.status === 200){
+                alert('가입되었습니다 로그인하세요');
+            }else if(response.status !== 200)
+            alert('승인할 수 없는 계정입니다 다시 입력하세요');
             return thunkAPI.fulfillWithValue(response);
-        } catch (error){
+            
+        } catch (error){ 
+            console.log(error);
+            if(error.status !== 200)
+            alert('승인할 수 없는 계정입니다 다시 입력하세요');
             return thunkAPI.rejectWithValue(error.status);
-            alert("중복된 계정입니다. 다시 입력하세요.");
         }
     }
 );
 
 
 
-//eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0Iiwic3ViIjoi7YWM7Iqk7Yq4IiwiZXhwIjoxNjYxMTU5NjgxfQ.v0OeANxIneZbSBsGIRFlIIG30H2fYQcyqoosOxcU9zM
+
 export const __userLogin = createAsyncThunk(
     "/api/login",
     async(payload, thunkAPI) => {
         console.log("thunk 들어왔다!",payload);
         try {
             const {email,password} = payload
-            const response = await axios.post(`${URI.BASE}/api/login`,
-            { email,password }
+            const response = await axios.post(
+                `${URI.BASE}/api/login`, { email,password }
             );
                 const accessToken = response.headers.authorization;
                 const refreshtoken = response.headers[`refresh-token`];
@@ -73,38 +80,13 @@ export const __userLogin = createAsyncThunk(
                     userName: decodeBody[7],
                     accessToken,
                     refreshtoken,
-                })
-            
+                })           
         }
         catch(error){
             return thunkAPI.rejectWithValue(error);
         }
     }
 )
-
-
-// export const __userLogin = createAsyncThunk(
-//     "/api/login",
-//     async(payload, thunkAPI) => {
-//         console.log("thunk 들어왔다!",payload);
-//         try {
-//             const {email,password} = payload
-//             const response = await axios.post(`${URI.BASE}api/login`,
-//             { email,password }
-//             )
-//                 localStorage.setItem('authorization', response.headers.authorization);
-//                 localStorage.setItem('refreshToken', response.headers[`refresh-token`]);
-//                 localStorage.setItem('isLogin', true);
-//                 console.log("22222");
-//                 return thunkAPI.fulfillWithValue(response.data)
-            
-//         }
-//         catch(error){ console.log("33333");
-//             return thunkAPI.rejectWithValue(error);
-//         }
-//     }
-// )
-
 
 
 const userSlice = createSlice({
@@ -123,5 +105,4 @@ const userSlice = createSlice({
     }
 })
 
-// export const { login, logout } = userSlice.actions;
 export default userSlice.reducer;

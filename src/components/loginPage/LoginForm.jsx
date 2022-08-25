@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import logo from '../../static/img/logo.png'
 import styled from 'styled-components';
 import { useForm } from "react-hook-form";
-import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { __userLogin } from '../../redux/modules/userSlice';
 
@@ -10,9 +10,9 @@ import { __userLogin } from '../../redux/modules/userSlice';
 
 const Loginform = (props) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     //watch는 입력값 확인용이므로 추후 삭제
     const { watch, register, handleSubmit, formState:{errors} } = useForm();
-    console.log(watch());
 
     // const isLogin = useSelector((state) => state.user.isLogin);//이건 어디에 붙여야 할까>
     
@@ -20,6 +20,7 @@ const Loginform = (props) => {
         console.log("가보자고!11",payload);
         dispatch(__userLogin(payload))
         console.log("가보자고!22",payload);
+        navigate ('/');
     };
 
 
@@ -36,7 +37,7 @@ const Loginform = (props) => {
                         placeholder='이메일을 입력해주세요.'
                         {...register("email",
                         {required: "이메일은 필수입니다.", 
-                        pattern:/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/,
+                        pattern:/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{5,20}$/,
                         })}//숫자0-9영어대소a-z특문-_. @ 숫자0-9영어대소a-z특문-_. . 영문대소a-z
                         />
                         {errors.email && errors.email.type === "pattern" && <p> 이메일 형식을 입력해주세요. </p>}
