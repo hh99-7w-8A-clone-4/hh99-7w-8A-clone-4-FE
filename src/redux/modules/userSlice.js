@@ -7,6 +7,8 @@ const URI = {
     BASE: 'http://3.39.240.159',
 };
 
+export const REDIRECT_URI = 'http://3.39.240.159/user/kakao/callback'
+
 const LOGIN = "user/LOGIN"
 // const LOGOUT = "user/LOGOUT"
 
@@ -44,9 +46,6 @@ export const __userRegister = createAsyncThunk(
             return thunkAPI.fulfillWithValue(response);
             
         } catch (error){ 
-            console.log(error);
-            if(error.status !== 200)
-            alert('승인할 수 없는 계정입니다 다시 입력하세요');
             return thunkAPI.rejectWithValue(error.status);
         }
     }
