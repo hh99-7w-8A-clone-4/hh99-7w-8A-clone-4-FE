@@ -4,25 +4,27 @@ import styled from "styled-components";
 import ProfileCard from "../../elements/ProfileCard";
 import { __getFriendList } from "../../redux/modules/friendSlice";
 
-function FriendsList() {
+function FriendsList({ stompClient }) {
   const dispatch = useDispatch();
   const friends = useSelector((state) => state.friendSlice.friends);
   useEffect(() => {
     dispatch(__getFriendList());
   }, []);
+  const { userName, userProfileImg, userInfo } = localStorage;
   return (
     <StFriendsList>
       <StMyProfileSection>
         <ProfileCard
+          key="mine"
           mine={true}
-          nickName="강태훈"
-          profileImg="https://images.unsplash.com/photo-1661102165730-dfb7f86b8206?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80"
-          info="10월까지 속세와 단절합니다."
+          nickName={userName}
+          profileImg={userProfileImg}
+          info={userInfo}
         />
       </StMyProfileSection>
       <StLine></StLine>
-      <p className="friends-counter">친구 118</p>
-      {friends.map((friend) => {
+      <p className="friends-counter">친구 {friends?.length}</p>
+      {friends?.map((friend) => {
         return (
           <ProfileCard
             key={friend.memberId}
@@ -37,7 +39,7 @@ function FriendsList() {
 }
 
 const StFriendsList = styled.div`
-  width: calc(100vw - 66px);
+  width: calc(100vw - 48px);
   height: calc(100vh - 178px);
   background-color: #ffffff;
   display: flex;

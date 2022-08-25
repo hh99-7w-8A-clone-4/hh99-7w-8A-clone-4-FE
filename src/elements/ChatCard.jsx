@@ -1,19 +1,27 @@
-import React, { startTransition } from "react";
+import React, { startTransition, useEffect } from "react";
 import styled, { css } from "styled-components";
 
-function ChatCard({ author, body }) {
+function ChatCard({ author, body, nickName, createdAt, profilePic }) {
+  const sliceTime = new Date(createdAt);
+  const createDate = sliceTime.getDate();
+  const createDay = sliceTime.getDay();
+  const createHour = sliceTime.getHours();
+  const createMinute = sliceTime.getMinutes();
+
   return (
     <StChatContainer author={author}>
-      {author === "friend" && (
-        <img src="https://images.unsplash.com/photo-1613688270958-f76694a3daef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2231&q=80" />
+      {author === "friend" && <img src={profilePic} />}
+      {author === "me" && (
+        <span className="create-time">{createHour + ":" + createMinute}</span>
       )}
-      {author === "me" && <span className="create-time">오후 04:44</span>}
       <StMainContentWrapper>
-        {author === "friend" && <h3>강머훈</h3>}
+        {author === "friend" && <h3>{nickName}</h3>}
 
         <StChatCard author={author}>{body}</StChatCard>
       </StMainContentWrapper>
-      {author === "friend" && <span className="create-time">오후 04:44</span>}
+      {author === "friend" && (
+        <span className="create-time">{createHour + ":" + createMinute}</span>
+      )}
     </StChatContainer>
   );
 }

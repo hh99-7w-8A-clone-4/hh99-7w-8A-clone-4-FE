@@ -5,12 +5,15 @@ const GlobalStyle = createGlobalStyle`
   // :: Basic(400, 500) & English Font(400, 500, 700) import
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500&family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
   // :: Korean Font import
-  @font-face {
-    font-family: 'SEBANG_Gothic_Bold';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2104@1.0/SEBANG_Gothic_Bold.woff') format('woff');
+ 
+    @font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-  }
+    }
+
+
   // :: Basic Font import
   :root {
     --bg-color: #F5ECE9;
@@ -21,8 +24,7 @@ const GlobalStyle = createGlobalStyle`
     --text-color: #000000;
     --border-style: 2px solid #000000;
     --english-font:'Ubuntu', sans-serif;
-    --korean-font:'SEBANG_Gothic_Bold';
-    --basic-font:'IBM Plex Sans KR', sans-serif;
+    --basic-font: 'GmarketSansMedium', sans-serif;
   }
   
   * {
@@ -56,6 +58,10 @@ const GlobalStyle = createGlobalStyle`
   }
   .hidden {
     display: none;
+  }
+
+  .focus-btn {
+    background-color: #f7ca13 !important;
   }
 `;
 
