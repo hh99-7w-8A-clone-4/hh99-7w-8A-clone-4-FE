@@ -20,6 +20,16 @@
 ## WE MAKE
 
 ### KAKAO TALK CLONE PROJECT
+![스크린샷 2022-08-25 오후 6 53 01](https://user-images.githubusercontent.com/103446802/186634849-df6161f9-1220-4b65-ac57-32ab43884243.png)
+![스크린샷 2022-08-25 오후 6 53 15](https://user-images.githubusercontent.com/103446802/186634876-5f300753-f409-4b4e-ab30-4604fc0ede8a.png)
+![스크린샷 2022-08-25 오후 6 53 55](https://user-images.githubusercontent.com/103446802/186634889-02c1b9cb-c224-43d0-87ef-abadde8b4285.png)
+![스크린샷 2022-08-25 오후 6 54 10](https://user-images.githubusercontent.com/103446802/186634914-ceee965b-a8c7-4b30-9881-7fda9499905d.png)
+![스크린샷 2022-08-25 오후 6 54 50](https://user-images.githubusercontent.com/103446802/186634930-31fb6f3f-797a-4aa7-a889-3675dff5064f.png)
+![스크린샷 2022-08-25 오후 6 55 03](https://user-images.githubusercontent.com/103446802/186634988-825f2d98-31a2-4f6d-aa92-1cc97a437a03.png)
+![스크린샷 2022-08-25 오후 6 55 11](https://user-images.githubusercontent.com/103446802/186635037-641e8a9a-bf64-4df9-a43a-b8a9c08c1642.png)
+
+
+
 
 <hr>
 
