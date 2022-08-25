@@ -56,6 +56,7 @@
 
 
 FE
+
 📍 Trouble
 회원가입이 성공하면 성공 alert 확인 되나 실패 alert 동시에 확인
 ⚙️ Solution
@@ -90,8 +91,8 @@ authorization을 할당하는 부분을 로그인 시, 로그인후 렌더링 �
 
 
 BE
-[
-Trouble
+
+📍 Trouble
 1.클라이언트와 content가 끊겼을때, 마지막 채팅 내용을 저장해서 마지막에 읽은 채팅 아이디 값으로
 읽지 않은 메세지를 표시하고 싶었지만, 마지막으로 읽은 값을 찾아오지를 못 함.
 
@@ -104,8 +105,7 @@ Solution
 ]
 
 
-[
-Trouble
+📍 Trouble
 roomService 에서 roomCreate를 실행시 roomDetail에서 roomMaster의 정보를 가져와 
 해당 엔티티에 필요한 정보들을 가져올 수 없었음. .
 
@@ -116,8 +116,7 @@ roomDetail 에서 roomMaster에 @ManyToOne(fetch = FetchType.LAZY) 를 적용해
 상위 엔티티에서 하위 엔티티의 모든 작업을 실행할 수 있도록 설정함.
 ]
 
-[
-Trouble 
+📍 Trouble 
 
 시큐리티에 허가 받지 않으면 web socket 권한을 사용하지 못하게 하려고 했는데,
 antMatchers를 주석처리하면 403에러가 발생 인증 처리가 되지 않음.
@@ -136,10 +135,7 @@ header를 달 수 있게 하려면 connection 뒤에 작은 인증 시스템을 
 
 reissue 관련
 
-[
-트러블-
-
-refresh token의 값을 받지를 못 함.
+📍 refresh token의 값을 받지를 못 함.
 access-token중 bearer값도 같이 받아 오고 있음.
 
 해결
@@ -147,9 +143,8 @@ access-token중 bearer값도 같이 받아 오고 있음.
 ]
 
 
-[
-트러블 - 
-서버에서 Refresh - token 이라고 보내주지만,
+
+📍 서버에서 Refresh - token 이라고 보내주지만,
 클라이언트에서 refresh-token으로 전달해 줘서 클라이언트에서 받지 못 했음.
 
 해결- 
