@@ -1,20 +1,19 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import webstomp from "webstomp-client";
 import { Buffer } from "buffer";
-//process.env.REACT_APP_BASE_URI
-//'http://3.39.240.159/'
+import { axiosInstance } from "../../shared/apis";
+import SockJS from "sockjs-client";
 const URI = {
-    BASE: 'http://3.39.240.159',
+  BASE: process.env.REACT_APP_BASE_URI,
 };
 
-export const REDIRECT_URI = 'http://3.39.240.159/user/kakao/callback'
-
-const LOGIN = "user/LOGIN"
+const LOGIN = "user/LOGIN";
 // const LOGOUT = "user/LOGOUT"
 
-export function UserLogIn (user){
-    console.log("UserLogIn");
-    return {type: LOGIN, user}
+export function UserLogIn(user) {
+  console.log("UserLogIn");
+  return { type: LOGIN, user };
 }
 
 // export function UserLogOut (user){
@@ -53,55 +52,61 @@ export const __userRegister = createAsyncThunk(
 
 
 
-
 export const __userLogin = createAsyncThunk(
     "/api/login",
-    async(payload, thunkAPI) => {
-        console.log("thunk 들어왔다!",payload);
-        try {
-            const {email,password} = payload
-            const response = await axios.post(
-                `${URI.BASE}/api/login`, { email,password }
-            );
-                const accessToken = response.headers.authorization;
-                const refreshtoken = response.headers[`refresh-token`];
-                localStorage.setItem('isLogin', true);
-                const encodeBody = accessToken.split(".")[1];
-                const decodeBody = Buffer.from(encodeBody, "base64")
-                    .toString("utf8")
-                const jsonBody = JSON.parse(decodeBody);
-                localStorage.setItem('userId',jsonBody.jti);
-                localStorage.setItem('userName',jsonBody.sub);
-                localStorage.setItem('accessToken',accessToken);
-                localStorage.setItem('refreshtoken',refreshtoken);
-                return thunkAPI.fulfillWithValue({
-                    userId: decodeBody[3],
-                    userName: decodeBody[7],
-                    accessToken,
-                    refreshtoken,
-                })           
-        }
-        catch(error){
-            return thunkAPI.rejectWithValue(error);
-        }
+    async (payload, thunkAPI) => {
+      try {
+        const { email, password } = payload;
+        const response = await axios.post(`${URI.BASE}/api/login`, {
+          email,
+          password,
+        });
+  
+        const accessToken = response.headers.authorization;
+        const refreshtoken = response.headers[`refresh-token`];
+        const encodeBody = accessToken.split(".")[1];
+        const decodeBody = new Buffer.from(encodeBody, "base64").toString("utf8");
+        const jsonBody = JSON.parse(decodeBody);
+        axiosInstance.defaults.headers.common["Authorization"] = accessToken;
+        localStorage.setItem("userId", jsonBody.jti);
+        localStorage.setItem("userName", jsonBody.sub);
+        localStorage.setItem("userProfileImg", response.data.profilePic);
+        localStorage.setItem("userInfo", response.data.introduce);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshtoken", refreshtoken);
+        return thunkAPI.fulfillWithValue(jsonBody.sub);
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+      }
     }
 )
-
-
 const userSlice = createSlice({
-    name:"user",
-    initialState,
-    reducers: {},
-    extraReducers:{
-        [__userLogin.fulfilled]: (state, action) => {
-            state.success = action.payload;
-            state.isLogin = true
+  name: "userSlice",
+  initialState,
+  reducers: {
+    asyncUserName: (state, action) => {
+      state.userName = localStorage.getItem("userName");
+    },
+    userLogout: (state, action) => {
+      const userToken = localStorage.getItem("accessToken");
+      axios.delete(`${URI.BASE}/api/logout`, {
+        headers: {
+          Authorization: userToken,
         },
-        [__userLogin.rejected]: (state, action) => {
-            state.isLogin = false;
-            state.error = action.payload;
-        }
-    }
-})
-
+      });
+    },
+  },
+  extraReducers: {
+    [__userLogin.fulfilled]: (state, action) => {
+      state.isLoading = true;
+      state.userName = action.payload;
+    },
+    [__userLogin.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+  },
+});
+export const { asyncUserName, userLogout } = userSlice.actions;
+// export const { login, logout } = userSlice.actions;
 export default userSlice.reducer;

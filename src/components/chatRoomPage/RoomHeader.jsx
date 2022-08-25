@@ -9,14 +9,16 @@ import {
   AiOutlineBell,
 } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function RoomHeader() {
+  const roomInfo = useSelector((state) => state.currentRoomSlice);
   return (
     <StHeaderContainer>
       <StInfoContainer>
-        <img src="https://images.unsplash.com/photo-1497171156029-51dfc973e5f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" />
+        <img src={roomInfo.roomPic} />
         <div className="name-container">
-          <span>강태훈</span>
+          <span>{roomInfo.roomTitle}</span>
           <AiOutlineSearch />
         </div>
       </StInfoContainer>
@@ -43,6 +45,7 @@ const StHeaderContainer = styled.div`
   padding: 10px;
   width: 100vw;
   height: 74px;
+  overflow: hidden;
   background-color: #a9bdce;
 `;
 
@@ -87,7 +90,14 @@ const StNavGroup = styled.div`
       margin: 0 7px;
     }
   }
+  .outNav {
+    width: 70px;
+  }
   .innerNav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
     svg {
       width: 22px;
       height: 22px;

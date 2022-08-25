@@ -1,19 +1,40 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
-function ChatSubmitBox() {
+function ChatSubmitBox({ stompClient, roomId }) {
   const [chatBody, setChatBody] = useState("");
-  const handlSubmitChat = (e) => {
+
+  const handleSubmitChat = (e) => {
     e.preventDefault();
-    console.log(chatBody);
+    const createdAt = Date.now().toString();
+    const content = {
+      content: chatBody,
+      memberId: localStorage.getItem("userId"),
+      nickname: localStorage.getItem("userName"),
+      profilePic:
+        "https://images.unsplash.com/photo-1497171156029-51dfc973e5f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+      createdAt,
+    };
+    stompClient.current.send(
+      `/pub/chat/room/${roomId}`,
+      JSON.stringify(content),
+      {
+        Authorization: localStorage.getItem("accessToken"),
+      }
+    );
     setChatBody("");
   };
   return (
     <StBoxContainer>
-      <StChatForm onSubmit={handlSubmitChat} chatLength={chatBody.length}>
+      <StChatForm onSubmit={handleSubmitChat} chatLength={chatBody.length}>
         <textarea
           onChange={(e) => {
             setChatBody(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSubmitChat(e);
+            }
           }}
           value={chatBody}
         />
@@ -38,13 +59,15 @@ const StChatForm = styled.form`
     width: calc(100vw - 74px);
     height: 100%;
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: hidden;
     text-align: justify;
     resize: none;
     border: none;
     font-size: 0.8rem;
     :focus {
       outline: none;
+      text-decoration: none;
+      color: black;
     }
   }
 

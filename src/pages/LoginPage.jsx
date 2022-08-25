@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Navigate } from "react-router-dom";
 import Loginform from '../components/loginPage/LoginForm';
 import Footer from '../components/loginPage/Footer';
 import styled from 'styled-components';
@@ -8,11 +9,12 @@ import styled from 'styled-components';
 
 const Loginpage = () => {
     // const isLogin = useSelector((state) => state.user.isLogin);
-    
+    const loggedUserName = useSelector((state) => state.userSlice.userName);
     return (
         <LoginLayout>
             <Loginform/>
             <Footer/>
+            {loggedUserName !== null && <Navigate to="/main" replace={true} />}
         </LoginLayout>
     );
 }
@@ -39,3 +41,4 @@ const LoginLayout = styled.div`
         margin: 100px;
     }
 `;
+
