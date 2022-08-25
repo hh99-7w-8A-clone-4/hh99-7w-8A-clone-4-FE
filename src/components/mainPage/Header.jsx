@@ -95,6 +95,7 @@ function Header({ isOn, stompClient }) {
         <>
           <h1>친구</h1>
           <AiOutlineUserAdd
+            key="friend-icon"
             className="add-friend"
             onClick={handleToggleModal}
           />
@@ -103,12 +104,14 @@ function Header({ isOn, stompClient }) {
         <>
           <h1>채팅</h1>
           <BiMessageRoundedAdd
+            key="chatroom-icon"
             className="create-chatroom"
             onClick={handleInvitation}
           />
         </>
       )}
       <StFriendModal
+        key="friendModal"
         ref={modalRef}
         className="hidden"
         onClick={handleToggleModal}
@@ -141,6 +144,7 @@ function Header({ isOn, stompClient }) {
         </StModalBody>
       </StFriendModal>
       <StInviteModal
+        key="inviteModal"
         ref={inviteRef}
         className="hidden"
         onClick={handleInvitation}

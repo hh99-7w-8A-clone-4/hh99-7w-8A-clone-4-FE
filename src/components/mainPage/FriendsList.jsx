@@ -23,8 +23,8 @@ function FriendsList({ stompClient }) {
         />
       </StMyProfileSection>
       <StLine></StLine>
-      <p className="friends-counter">친구 {friends.length}</p>
-      {friends.map((friend) => {
+      <p className="friends-counter">친구 {friends?.length}</p>
+      {friends?.map((friend) => {
         return (
           <ProfileCard
             key={friend.memberId}

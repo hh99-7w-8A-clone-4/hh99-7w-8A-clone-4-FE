@@ -63,6 +63,7 @@ function ChatRoomList({ stompClient }) {
               <ChatRoomCard
                 key={room.roomMasterId}
                 roomId={room.roomMasterId}
+                roomPic={room.roomPic}
                 roomName={room.roomName}
                 people={room.people}
                 stompClient={stompClient}

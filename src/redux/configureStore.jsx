@@ -3,6 +3,7 @@ import userSlice from "./modules/userSlice";
 import thunk from "redux-thunk";
 import chatSlice from "./modules/chatSlice";
 import friendSlice from "./modules/friendSlice";
+import currentRoomSlice from "./modules/currentRoomSlice";
 
 const middlewares = [thunk];
 
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   userSlice,
   chatSlice,
   friendSlice,
+  currentRoomSlice,
 });
 
 // 스토어 연결

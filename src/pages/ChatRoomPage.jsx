@@ -19,12 +19,15 @@ function ChatRoomPage() {
   const stompClient = useRef(null);
   const prevDate = useRef(0);
   const chatList = useSelector((state) => state.chatSlice.chatList);
+
   useEffect(() => {
     let sockJs = new SockJS(WSURI);
     let subscription;
     stompClient.current = webstomp.over(sockJs);
     stompClient.current.connect(
-      {},
+      {
+        Authorization: localStorage.getItem("accessToken"),
+      },
       function (payload) {
         dispatch(__getinitialChatList(roomId));
         subscription = stompClient.current.subscribe(
@@ -39,6 +42,7 @@ function ChatRoomPage() {
       },
       function (payload) {
         console.log(payload);
+        stompClient.current.disconnect();
       }
     );
 

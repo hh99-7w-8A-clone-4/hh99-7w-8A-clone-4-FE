@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { apis } from "../../shared/apis";
 
 const URI = {
   BASE: process.env.REACT_APP_BASE_URI,
@@ -16,14 +17,14 @@ export const __getFriendList = createAsyncThunk(
   "friend/__getFriendList",
   async (payload, thunkAPI) => {
     try {
-      const userToken = localStorage.getItem("accessToken");
-      const requestRes = await axios.get(`${URI.BASE}/api/friends`, {
-        headers: {
-          Authorization: userToken,
-        },
-      });
-
-      return thunkAPI.fulfillWithValue(requestRes.data);
+      // const userToken = localStorage.getItem("accessToken");
+      // const requestRes = await axios.get(`${URI.BASE}/api/friends`, {
+      //   headers: {
+      //     Authorization: userToken,
+      //   },
+      // });
+      const requestRes = await apis.getFrind();
+      return thunkAPI.fulfillWithValue(requestRes);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }

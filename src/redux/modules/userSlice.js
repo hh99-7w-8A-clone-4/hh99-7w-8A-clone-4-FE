@@ -2,9 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import webstomp from "webstomp-client";
 import { Buffer } from "buffer";
+import { axiosInstance } from "../../shared/apis";
 import SockJS from "sockjs-client";
-//process.env.REACT_APP_BASE_URI
-//'http://3.39.240.159/'
 const URI = {
   BASE: process.env.REACT_APP_BASE_URI,
 };
@@ -37,12 +36,13 @@ export const __userLogin = createAsyncThunk(
         email,
         password,
       });
-      console.log(response);
+
       const accessToken = response.headers.authorization;
       const refreshtoken = response.headers[`refresh-token`];
       const encodeBody = accessToken.split(".")[1];
       const decodeBody = new Buffer.from(encodeBody, "base64").toString("utf8");
       const jsonBody = JSON.parse(decodeBody);
+      axiosInstance.defaults.headers.common["Authorization"] = accessToken;
       localStorage.setItem("userId", jsonBody.jti);
       localStorage.setItem("userName", jsonBody.sub);
       localStorage.setItem("userProfileImg", response.data.profilePic);

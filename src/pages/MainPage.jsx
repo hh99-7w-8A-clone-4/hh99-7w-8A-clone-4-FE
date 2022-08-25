@@ -30,9 +30,14 @@ function MainPage() {
   useEffect(() => {
     connetWs();
 
-    stompClient.current.connect({}, function (frame) {
-      console.log(frame);
-    });
+    stompClient.current.connect(
+      {
+        Authorization: localStorage.getItem("accessToken"),
+      },
+      function (frame) {
+        console.log(frame);
+      }
+    );
 
     dispatch(asyncUserName());
     return () => {
